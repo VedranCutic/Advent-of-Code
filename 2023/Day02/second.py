@@ -1,6 +1,6 @@
 import re
 
-zbroj = 0
+umnozak = 0
 
 with open("input.txt") as f:
     lines = f.readlines()
@@ -12,18 +12,21 @@ with open("input.txt") as f:
         pattern = re.compile(r'(\d+) (\w+)')
         matches = pattern.findall(line)
 
+        red = 0
+        blue = 0
+        green = 0
+
         for match in matches:
             if(match[1] == "red"):
-                if(int(match[0]) > 12):
-                  moze = 0
+                if(int(match[0]) > red):
+                    red = int(match[0])
             if(match[1] == "green"):
-                if(int(match[0]) > 13):
-                    moze = 0
+                if(int(match[0]) > green):
+                    green = int(match[0])
             if(match[1] == "blue"):
-                if(int(match[0]) > 14):
-                    moze = 0
-        
-        if(moze == 1):
-            zbroj += int(id)
-    
-print(zbroj)
+                if(int(match[0]) > blue):
+                    blue = int(match[0])
+            
+        umnozak += red * green * blue
+
+print(umnozak)
