@@ -18,7 +18,7 @@ solution = 0
 for i in range(len(left_list)):
     solution += abs(left_list[i] - right_list[i])
 
-print(solution)
+print(f"Task 1: {solution}")
 
 
 similarity = 0
@@ -39,4 +39,4 @@ for i in range(len(left_list)):
     if left_list[i] in right_list_dict:
         similarity += left_list[i] * right_list_dict[left_list[i]]
 
-print(similarity)
+print(f"Task 2: {similarity}")
