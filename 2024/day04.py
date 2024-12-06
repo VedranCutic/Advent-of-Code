@@ -62,3 +62,55 @@ print(f"Task 1: {sum}")
 
 
 sum = 0
+
+
+def check_task2(c1, c2, c3, c4):
+    return (
+        c1 == "A"
+        and c2 == "S"
+        and ((c3 == "M" and c4 == "S") or (c3 == "S" and c4 == "M"))
+    )
+
+
+for i, line in enumerate(input):
+    for j, character in enumerate(line):
+        if character == "M":
+            # DIAGONAL UPPER LEFT
+            if j >= 2 and i >= 2:
+                if check_task2(
+                    input[i - 1][j - 1],
+                    input[i - 2][j - 2],
+                    input[i][j - 2],
+                    input[i - 2][j],
+                ):
+                    sum += 1
+            # DIAGONAL UPPER RIGHT
+            if len(line) - j > 2 and i >= 2:
+                if check_task2(
+                    input[i - 1][j + 1],
+                    input[i - 2][j + 2],
+                    input[i - 2][j],
+                    input[i][j + 2],
+                ):
+                    sum += 1
+            # DIAGONAL BOTTOM LEFT
+            if j >= 2 and len(input) - i > 2:
+                if check_task2(
+                    input[i + 1][j - 1],
+                    input[i + 2][j - 2],
+                    input[i + 2][j],
+                    input[i][j - 2],
+                ):
+                    sum += 1
+            # DIAGONAL BOTTOM RIGHT
+            if len(line) - j > 2 and len(input) - i > 2:
+                if check_task2(
+                    input[i + 1][j + 1],
+                    input[i + 2][j + 2],
+                    input[i + 2][j],
+                    input[i][j + 2],
+                ):
+                    sum += 1
+
+
+print(f"Task 2: {sum / 2}")
