@@ -1,5 +1,8 @@
 import numpy as np
-
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import seaborn as sns
+from matplotlib.colors import ListedColormap
 
 def parse(filename):
     input_matrix = []
@@ -37,6 +40,27 @@ def find_removable(matrix):
     return result, new_matrix
 
 
+def create_gif(matrices):
+        
+    fig, ax = plt.subplots()
+    cmap = ListedColormap(['black', 'white'])
+    fig, ax = plt.subplots()
+
+    sns.heatmap(matrices[0], cmap=cmap, cbar=False, square=True, ax=ax)
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+    def update(frame):
+        ax.clear()
+        sns.heatmap(matrices[frame], cmap=cmap, cbar=False, square=True, ax=ax)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        return ax,
+
+    ani = animation.FuncAnimation(fig, update, frames=len(matrices), blit=False)
+    ani.save('part2.gif', writer='pillow', fps=10)
+
+
 def main():
     matrix = parse(filename="input.txt")
 
@@ -45,12 +69,16 @@ def main():
 
     result2 = 0
     result = -99
+    matrices = []
     new_matrix = np.copy(matrix)
     while result != 0:
+        matrices.append(new_matrix == "@")
         result, new_matrix = find_removable(new_matrix)
         result2 += result
     print(f"SOLUTION FOR PART 2: {result2}")
 
-            
+    create_gif(matrices)
+
+
 if __name__ == "__main__":
     main()
