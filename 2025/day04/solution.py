@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import seaborn as sns
-from matplotlib.colors import ListedColormap
+from matplotlib.colors import BoundaryNorm, ListedColormap
 
 def parse(filename):
     input_matrix = []
@@ -41,24 +41,33 @@ def find_removable(matrix):
 
 
 def create_gif(matrices):
-        
-    fig, ax = plt.subplots()
-    cmap = ListedColormap(['black', 'white'])
-    fig, ax = plt.subplots()
 
-    sns.heatmap(matrices[0], cmap=cmap, cbar=False, square=True, ax=ax)
+    fig, ax = plt.subplots(facecolor="black")
+
+    cmap = ListedColormap(["black", "gray", "red"])
+    norm = BoundaryNorm([0, 1, 2, 3], cmap.N)
+
+    sns.heatmap(matrices[0], cmap=cmap, norm=norm,
+                cbar=False, square=True, ax=ax)
     ax.set_xticks([])
     ax.set_yticks([])
 
     def update(frame):
         ax.clear()
-        sns.heatmap(matrices[frame], cmap=cmap, cbar=False, square=True, ax=ax)
+        sns.heatmap(matrices[frame], cmap=cmap, norm=norm,
+                    cbar=False, square=True, ax=ax)
         ax.set_xticks([])
         ax.set_yticks([])
         return ax,
 
-    ani = animation.FuncAnimation(fig, update, frames=len(matrices), blit=False)
-    ani.save('part2.gif', writer='pillow', fps=10)
+    ani = animation.FuncAnimation(
+        fig,
+        update,
+        frames=len(matrices),
+        blit=False
+    )
+
+    ani.save("part2.gif", writer="pillow", fps=10)
 
 
 def main():
@@ -73,7 +82,10 @@ def main():
     new_matrix = np.copy(matrix)
     while result != 0:
         matrices.append(new_matrix == "@")
-        result, new_matrix = find_removable(new_matrix)
+        result, result_matrix = find_removable(new_matrix)
+        if result != -99:
+            matrices.append(np.where((result_matrix == ".") & (new_matrix == "@"), 2, result_matrix == "@"))
+        new_matrix = result_matrix
         result2 += result
     print(f"SOLUTION FOR PART 2: {result2}")
 
