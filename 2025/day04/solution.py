@@ -42,9 +42,9 @@ def find_removable(matrix):
 
 def create_gif(matrices):
 
-    fig, ax = plt.subplots(facecolor="black")
+    fig, ax = plt.subplots(facecolor="#0d1117")
 
-    cmap = ListedColormap(["black", "gray", "red"])
+    cmap = ListedColormap(["#0d1117", "gray", "red"])
     norm = BoundaryNorm([0, 1, 2, 3], cmap.N)
 
     sns.heatmap(matrices[0], cmap=cmap, norm=norm,
