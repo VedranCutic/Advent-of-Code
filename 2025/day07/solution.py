@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import seaborn as sns
-from matplotlib.colors import BoundaryNorm, ListedColormap, LogNorm
+from matplotlib.colors import LogNorm
 
 
 def beam_emmition(beams, manifold):
