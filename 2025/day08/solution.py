@@ -1,7 +1,8 @@
 import math
 import itertools
 
-MAX_CONNECTIONS = 10
+MAX_CONNECTIONS = 1000
+FILENAME = "input.txt"
 
 
 # collection of all the points keyed to their x,y,z values
@@ -17,8 +18,7 @@ def calculate_Euclidean_distance(point1, point2):
 
 
 def main():
-    filename = "input.txt"
-    with open(filename, "r") as file:
+    with open(FILENAME, "r") as file:
         input = file.readlines()
     input = [list(map(int, line.strip().split(","))) for line in input]
 
@@ -63,25 +63,26 @@ def main():
     # into one new circuit
     merged = []
     found = True
-    while found:
-        for circuit1 in connections:
-            found = None
-            for circuit2 in merged:
-                if circuit1 & circuit2:
-                    circuit2 |= circuit1
-                    found = circuit2
-                    break
+    # this is needed to resolve all transitive overlaps
+    for circuit1 in connections:
+        found = None
+        for circuit2 in merged:
+            if circuit1 & circuit2:
+                circuit2 |= circuit1
+                found = circuit2
+                break
 
-            if not found:
-                merged.append(circuit1)
-            # transitive overlap
+        if not found:
+            merged.append(circuit1)
+        else:
+            merged = [m if m is found or not (m & found) else found | m for m in merged]
 
     sizes = []
     for c in merged:
         sizes.append(len(c))
 
-    print(sizes)
-    print(f"SOLUTION PART1: {math.prod(sizes)}")
+    result = sorted(sizes, reverse=True)[:3]
+    print(f"SOLUTION PART1: {math.prod(result)}")
 
 
 if __name__ == "__main__":
