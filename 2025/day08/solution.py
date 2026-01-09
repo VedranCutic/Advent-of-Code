@@ -33,7 +33,7 @@ def main():
         p2 = collection[hash2]
         dist = calculate_Euclidean_distance(p1, p2)
         euclidean_distances.append((dist, hash1, hash2))
-    euclidean_distances_sorted = sorted(euclidean_distances, key=lambda x: x[0])
+    euclidean_distances_sorted = sorted(euclidean_distances, key=lambda x: x[0], reverse=True)
 
     connections = []
     used_points = set()
@@ -64,23 +64,23 @@ def main():
     merged = []
     found = True
     # this is needed to resolve all transitive overlaps
-    for circuit1 in connections:
-        found = None
-        for circuit2 in merged:
-            if circuit1 & circuit2:
-                circuit2 |= circuit1
-                found = circuit2
-                break
+    while found:
+        for circuit1 in connections:
+            found = None
+            for circuit2 in merged:
+                if circuit1 & circuit2:
+                    circuit2 |= circuit1
+                    found = circuit2
+                    break
 
-        if not found:
-            merged.append(circuit1)
-        else:
-            merged = [m if m is found or not (m & found) else found | m for m in merged]
+            if not found:
+                merged.append(circuit1)
 
     sizes = []
     for c in merged:
         sizes.append(len(c))
 
+    merged.sort(key=lambda c: len(c), reverse=True)
     result = sorted(sizes, reverse=True)[:3]
     print(f"SOLUTION PART1: {math.prod(result)}")
 
